@@ -9,7 +9,7 @@ Because of any model need a fixed size input we have manipulate an image into fi
 ![Predict Me](images/me.png)
 
 ## To train your images
-- Clone the project
+- git clone https://github.com/Abdelrahmanrezk/Predict-Me.git
 - make new direction inside dataset with name "mixed_size"
 - put inside this new direction two direction "me" and "other"
 - put your image inside me direction
@@ -32,9 +32,10 @@ Because of any model need a fixed size input we have manipulate an image into fi
 
 ## Use FastApi
 - run FastAPI_for_prediction notebook
-- Head over http://localhost:5007/docs
+- Head over http://localhost:5008/docs
 - Click try it
 - choose model (logistic regression for now)
 - Upload image
 - Click Execute
 
+**see "predict-me.mp4" for more details**  
