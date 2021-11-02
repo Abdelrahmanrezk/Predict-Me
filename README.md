@@ -6,16 +6,35 @@ Because of any model need a fixed size input we have manipulate an image into fi
 - resize_width
 - resize_height 
 
-## What we have Done
-- Read all images inside dataset/mixed_size
-	- resize the image inside me dierction into fixed size
-	- resize the image inside other dierction into fixed size
-- scale_image
-	- scale image from intensity of 0 to 255 with different ranges into 0 - 1
+[Predict Me](images/me.png)
 
 ## To train your images
 - Clone the project
-- remove images inside dataset/mixed_size/me
-- remove images inside dataset/fixed_sized/me
+- make new direction inside dataset with name "mixed_size"
+- put inside this new direction two direction "me" and "other"
+- put your image inside me direction
+- put other images inside other direction
 - Leave other dierction it contain 
+- search for read_mixed_width_and_height_images() method and uncomment it
+- Run the notebook
+	- It will first resize your image into fixed size
+	- Then load dataframe and handle labels for you
+	- Then shuffle the data
+	- Split the data
+	- Just follow the instructure
+
+**Ensure you have these direction:**
+
+- SAVE_DIR = "images_uploaded/"
+- DATA_MIXED_SIZE='dataset/mixed_size/'
+- DATA_FIXED_SIZE="dataset/fixed_sized/"
+
+
+## Use FastApi
+- run FastAPI_for_prediction notebook
+- Head over http://localhost:5007/docs
+- Click try it
+- choose model (logistic regression for now)
+- Upload image
+- Click Execute
 
