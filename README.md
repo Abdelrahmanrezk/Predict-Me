@@ -6,7 +6,7 @@ Because of any model need a fixed size input we have manipulate an image into fi
 - resize_width
 - resize_height 
 
-[Predict Me](images/me.png)
+![Predict Me](images/me.png)
 
 ## To train your images
 - Clone the project
