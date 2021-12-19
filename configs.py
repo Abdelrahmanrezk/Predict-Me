@@ -223,6 +223,37 @@ def load_train_validation_set(df_all_images):
 
 
 
+def tensor_logs_dir(TENSOR_DIR, run_hyper_params):
+    '''
+    The function used to create dierction with the time we have run the model in, beside of that,
+    concat to this time which hyperparameters we have used in this run, this time along with hyperparameters, 
+    will help us compare result from different run with different hyperparamters, 
+    as we used the tensorboard server as our vislization tool to help decide which model we can use.
+    
+    Argument:
+    TENSOR_DIR: the tensor logs direction to be our direction for different runs.
+    run_hyper_params: which hyper params we have used for this run.
+    return
+    TENSOR_DIR + run id(which run along with hyperparams to create subdirectory for)
+    '''
+    
+    run_id = time.strftime("run_%Y_%m_%d_%H_%M_%S_" + run_hyper_params)
+    return os.path.join(TENSOR_DIR, run_id)
+
+
+def model_hyper_parameters(img_size, api_type, n_hidden, learning_rate, epochs):
+
+    learning_rate        = "_lr=" + str(learning_rate)
+    num_of_epochs        = "_epochs=" + str(epochs)
+    num_of_hidden_layers = "_num of hidden lr=" + str(n_hidden)
+    
+    params               = img_size + api_type + learning_rate + num_of_epochs + num_of_hidden_layers
+    
+
+    return params
+
+
+
 def image_display(image):
     image = mpimg.imread(image)
     imgplot = plt.imshow(image)
