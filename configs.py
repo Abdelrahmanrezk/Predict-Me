@@ -4,7 +4,7 @@ import matplotlib.image as mpimg
 from PIL import Image
 import matplotlib.pyplot as plt
 import os
-
+import time
 
 
 SAVE_DIR = "images_uploaded/"
