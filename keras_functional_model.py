@@ -60,18 +60,46 @@ def keras_functional_model_one_input_create(input_shape, n_hidden, n_neurons):
     return:
         model: The architecture of the model we have built
     '''
-    input_   = keras.layers.Input(shape=input_shape)
+    input_   = keras.layers.Input(shape=[input_shape])
     temp = input_
 
     for hidden in range(n_hidden):
         hidden_ = keras.layers.Dense(n_neurons, activation='relu')(temp)
         temp = hidden_
 
-    concat   = keras.layers.concatenate([input_, hidden_])
+    concat   = keras.layers.concatenate([input_, temp])
     output   = keras.layers.Dense(1, activation='sigmoid')(concat)
     model    = keras.Model(inputs=[input_], outputs=[output])
 
     return model
+
+def keras_functional_model_multi_input_create(input_shape_A, input_shape_B, n_hidden, n_neurons):
+    '''
+    The function used to build the architecture of functional model.
+    once we get the best hyperparameters, build the model with these hyperparameters.
+
+    Argument:
+        n_hidden      : How many hidden layers we need
+        n_neurons     : For each hidden layer which number of neurons we need (fixed number for all hidden layers)
+        input_shape   : The number of features we have defined by the image (width * height * 3 for rgb)
+
+    return:
+        model: The architecture of the model we have built
+    '''
+    input_A = keras.layers.Input(shape=[input_shape_A], name='wide_input')
+    input_B = keras.layers.Input(shape=[input_shape_B], name='deep_input')
+
+    temp = input_B
+    for hidden in range(n_hidden):
+        hidden_ = keras.layers.Dense(n_neurons, activation='relu')(temp)
+        temp    = hidden_
+
+    concat = keras.layers.concatenate([input_A, temp])
+    output = keras.layers.Dense(1, activation='sigmoid')(concat)
+    model = keras.Model(inputs=[input_A, input_B], outputs=[output])
+
+    return model
+
 
 
 def keras_functional_model_one_input_compile(model, learning_rate):
@@ -114,12 +142,20 @@ def train_functional_model_with_best_params(rnd_search_cv,  X_train, y_train, X_
 
     if api_type == "one_input_functional_api":
         model   = keras_functional_model_one_input_create(input_shape, n_hidden, n_neurons)
-    else:
-        pass
-
-
-    model   = keras_functional_model_one_input_compile(model, learning_rate)
-    
-    history = model.fit(X_train, y_train, epochs=epochs, validation_data=(X_val, y_val),
+        model   = keras_functional_model_one_input_compile(model, learning_rate)
+        history = model.fit(X_train, y_train, epochs=epochs, validation_data=(X_val, y_val),
                    callbacks=callbacks_)
+    elif api_type == "multi_input_functional_api":
+        input_shape_A   = int(X_train.shape[1] / 3)
+        input_shape_B   = X_train.shape[1] 
+
+        X_train_A, X_train_B = X_train[:, :input_shape_A],  X_train
+        X_val_A, X_val_B     = X_val[:, :input_shape_A], X_val
+        model   = keras_functional_model_multi_input_create(input_shape_A, input_shape_B, 
+                                    n_hidden, n_neurons)
+        model   = keras_functional_model_one_input_compile(model, learning_rate)
+
+        history = model.fit((X_train_A, X_train_B), y_train, epochs=epochs, 
+            validation_data=((X_val_A, X_val_B), y_val), callbacks=callbacks_)
     return model, history, model_hyper_params
+
